@@ -111,7 +111,7 @@ Token Fraud scenarios include:
 * Canary Rollouts
   * Canary deployments are a pattern for rolling out releases to a subset of users or servers. The idea is to first deploy the change to a small subset of servers, test it, and then roll the change out to the rest of the servers. The canary deployment serves as an early warning indicator with less impact on downtime: if the canary deployment fails, the rest of the servers aren’t impacted.
 
-* Principle #7: Policy management and distribution is centralized.
+### Principle #7: Policy management and distribution is centralized.
 
 > MeshSecOps drives practitioners to mandate and manage centralized security policy across the entire organization allowing for easy deployment of authorization systems, encryption in transit, identity, network monitoring, analysis, add-on cybersecurity services and more. This makes it cheaper to operate mesh provided services and tooling securely and reliably.
 
