@@ -4,7 +4,7 @@ DevSecOps refers to the integration of security practices into a DevOps software
 
 Enter MeshSecOps…
 
-If we take a deeper look at the more progressive “cloud native” production environments where this newly secured DevSecOps-stamped code will run, it’s pretty clear to see that it is a mesh of Microservices (or service mesh). A service Mesh allows developers to shift the complexity of security, reliability and observability away from their application code into the mesh platform.
+If we take a deeper look at the more progressive “cloud native” production environments where this newly secured DevSecOps-stamped code will run, it’s pretty clear to see that it is a mesh of Microservices (or service mesh). A service mesh allows developers to shift the complexity of security, reliability and observability away from their application code into the mesh platform.
 
 DevSecOps is a movement about securing code
 MeshSecOps is a movement about securing the new mesh platform
@@ -12,8 +12,6 @@ MeshSecOps is a movement about securing the new mesh platform
 Just as we helped developers write more secure code through DevSecOps principals, it’s time that we help (Platform, SREs, DevOps, Infrastructure) Engineers run, monitor and secure the  runtime compute and network platform in production service mesh environments through MeshSecOps.
 
 > MeshSecOps inherits the DevSecOps principles that are timeless and relevant to today’s Microservice and Service Mesh engineering environments - removing the ones that should be implicit or are beyond our control to change. 
- 
-> Many of the existing principles from DevSecOps apply to the mentality and perspectives of human beings as it relates to attitude and what is the right way to operate in the security workplace (aka corporate culture). We don’t need to treat those in MeshSecOps since they have already permeated the culture.
 
 The following principles of MeshSecOps were gathered from leading edge Platform Engineering practitioners and condensed to be easy to understand. They meet Zero Trust Architecture guidelines from NIST Security Standards for Microservices (SP 800-204) and the U.S. Department of Defense Zero Trust Reference Architecture frameworks. 
 
@@ -30,12 +28,12 @@ The following principles of MeshSecOps were gathered from leading edge Platform 
     * The service mesh encodes an application identity into the X.509 certificates it issues to workloads (via SPIFFE). 
     * For a production cluster setup, it is highly recommended to use a production-ready Certificate Authority for signing requests.
 
-### Principle #3: Machine to machine (M2M) authentication and authorization are strictly enforced for communication between servers and the applications.
-
 * Secret Management
   * A secret is anything that you want to tightly control access to, such as API keys, passwords, certificates, and more. A service mesh requires access to a multitude of secrets: database credentials, API keys for external services, credentials for service-oriented architecture communication, etc. Understanding who is accessing what secrets is already very difficult and platform-specific. Adding on key rolling, secure storage, and detailed audit logs is almost impossible without a custom solution. This is where solutions like Hashicorp Vault steps in.
   * By default, Secrets are stored in etcd using base64 encoding. In environments with stringent security policies, this might not be acceptable, so additional security measures are needed to protect them.
   * For service mesh, a key management system should be able to provision secrets for multiple clusters at once.
+
+### Principle #3: Machine to machine (M2M) authentication and authorization are strictly enforced for communication between servers and the applications.
 
 * Authentication 
   * Authn (or Authentication) Is used to verify the person or service is who they say they are. Mutual TLS, or mTLS for short, is a method for mutual authentication. mTLS ensures that the parties at each end of a network connection are who they claim to be by verifying that they both have the correct private key. Once you have an Auth token or Service/Workload ID established through mTLS, you can access resources through gatekeepers at the workload-level based on roles and other permission identifiers contained within the token. 
@@ -49,6 +47,7 @@ The following principles of MeshSecOps were gathered from leading edge Platform 
   * To fully lock down traffic, it is recommended to configure authorization policies. Authz (or Authorization) can be implemented with or without Authentication. Depending on the architecture, normally Authn will have taken place and the user will bear some type of token (e.g. JWT) in their Authz request.
   * Authz provides fine-grained policies to allow or deny traffic across workloads in the mesh. 
   * Projects like OPA Gatekeeper and Kyverno exist to provide Authz policy on top of Kubernetes. The OPA-Envoy plugin is frequently deployed in Kubernetes environments as a sidecar container to provide fast policy-based decisions.
+  * Other projects provide Service-based Access Control (SBAC) to enforce the flow of sensitive data between services. SBAC enforces traffic across workload identities as an overlay to existing Authz policies.
   * Authz Policy Bypass
     * The enforcement point for authorization policies is the mesh proxy instead of the usual resource access point within the containerized application. A policy mismatch happens when the mesh proxy and the containerized application interpret the request differently. A mismatch can lead to either unexpected rejection or a policy bypass. The latter is usually a security incident that needs to be fixed immediately, and it’s also why we need path normalization in the authorization policy.
     * Specialized micro firewall projects provide additional normalization options. They can be deployed as part of the service mesh sidecars or ingress gateway to normalize requests in the mesh. The authorization policy will then be enforced on the normalized requests. 
